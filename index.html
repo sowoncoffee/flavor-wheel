@@ -139,7 +139,7 @@ s+='<path data-c="'+ci+'" d="'+sec(80,on?126:120,a0+ti*4,a0+ti*4+4)+'" style="fi
 });
 var m=a0+n*2,lp=pt(136,m);
 var anc=(m>10&&m<170)?'start':((m>190&&m<350)?'end':'middle');
-s+='<text data-c="'+ci+'" x="'+lp[0]+'" y="'+lp[1]+'" text-anchor="'+anc+'" dominant-baseline="central" style="font-size:12px;font-weight:'+(A===ci?600:400)+';fill:'+(A===ci?ink:mut)+'">'+esc(cname(d))+'</text>';
+s+='<text data-c="'+ci+'" x="'+lp[0]+'" y="'+lp[1]+'" text-anchor="'+anc+'" dominant-baseline="central" style="font-size:'+(ex?15:12)+'px;font-weight:'+(ex||A===ci?600:400)+';fill:'+(ex||A===ci?ink:mut)+'">'+esc(cname(d))+'</text>';
 a=a1;
 });
 if(A!==null){
