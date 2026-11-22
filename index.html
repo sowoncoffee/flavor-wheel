@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F2F4F3">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="향미 휠">
-<meta name="description" content="시음하면서 눌러 찾는 커피 향미 휠">
-<title>향미 휠</title>
+<meta name="apple-mobile-web-app-title" content="Flavor Wheel">
+<meta name="description" content="Flavor wheel / 향미 휠 / 风味轮">
+<title>Flavor Wheel · 향미 휠 · 风味轮</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23E8622C'/%3E%3Cpath d='M16 2a14 14 0 0 1 14 14H16z' fill='%23E58AB0'/%3E%3Cpath d='M16 30A14 14 0 0 1 2 16h14z' fill='%236BA34A'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23fff'/%3E%3C/svg%3E">
 <style>
 :root{--bg:#F2F4F3;--card:#FFFFFF;--ink:#1D2321;--mut:#5F6A66;--line:#D3D9D6;--btn-ink:#F2F4F3}
 @media (prefers-color-scheme:dark){:root{--bg:#121614;--card:#1A201D;--ink:#E8ECEA;--mut:#9AA5A0;--line:#2D3632;--btn-ink:#121614}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Pretendard","Apple SD Gothic Neo","Noto Sans KR","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
 .app{max-width:480px;margin:0 auto;padding:16px 16px 48px}
 header{display:flex;align-items:center;justify-content:space-between;gap:12px}
 h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-0.01em}
@@ -22,9 +22,9 @@ h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-0.01em}
 .cup{display:block;width:100%;margin-top:14px;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:16px}
 .cup::placeholder{color:var(--mut)}
 button{font:inherit;color:inherit;cursor:pointer}
-button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+button:focus-visible,.cup:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:none}
-.seg button{border:0;background:transparent;padding:7px 12px;font-size:13px;color:var(--mut)}
+.seg button{border:0;background:transparent;padding:7px 11px;font-size:13px;color:var(--mut)}
 .seg button.on{background:var(--ink);color:var(--btn-ink);font-weight:600}
 #wheel{margin:12px 0 4px}
 #wheel svg{display:block;width:100%;height:auto}
@@ -32,10 +32,8 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .pills{display:flex;flex-wrap:wrap;gap:6px}
 .pill{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:18px;background:transparent;font-size:13px}
 .pill i{width:10px;height:10px;border-radius:3px;display:inline-block}
-.pill b{font-weight:400;color:var(--mut)}
 .pill.on{border-color:var(--ink);font-weight:600}
 h2{margin:20px 0 6px;font-size:14px;font-weight:600}
-h2 span{font-weight:400;color:var(--mut)}
 .hint{margin:0;color:var(--mut);font-size:13px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{min-height:40px;padding:0 12px;border:1px solid;border-radius:8px;font-size:14px;background:transparent}
@@ -54,49 +52,56 @@ h2 span{font-weight:400;color:var(--mut)}
 <div class="app">
 <header>
 <div>
-<h1>향미 휠</h1>
-<p class="sub">시음하면서 눌러서 찾아보세요</p>
+<h1 id="ttl"></h1>
+<p class="sub" id="sub"></p>
 </div>
-<div class="seg" role="group" aria-label="언어">
+<div class="seg" role="group" aria-label="Language">
 <button type="button" data-l="en">EN</button>
 <button type="button" data-l="ko">한글</button>
+<button type="button" data-l="zh">中文</button>
 </div>
 </header>
 <input id="cup" class="cup" type="text" maxlength="40" autocomplete="off">
 <div id="wheel"></div>
 <div class="pills" id="pills"></div>
 <div id="panel"></div>
-<h2 id="th">내가 고른 향미</h2>
+<h2 id="th"></h2>
 <div class="tray" id="tray"></div>
 <div class="acts">
-<button type="button" class="act main" data-a="copy" id="bcopy">텍스트 복사</button>
-<button type="button" class="act" data-a="img" id="bimg">이미지 저장</button>
-<button type="button" class="act" data-a="clr" id="bclr">초기화</button>
+<button type="button" class="act main" data-a="copy" id="bcopy"></button>
+<button type="button" class="act" data-a="img" id="bimg"></button>
+<button type="button" class="act" data-a="clr" id="bclr"></button>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
 </div>
 <script>
 var RAW=[
-['Floral','꽃향','#E58AB0','jasmin|자스민;lily|백합;lavender|라벤더;coffee blossom|커피 꽃;osmanthus|금목서;passion flower|패션 플라워;freesia|프리지아;cherry blossom|벚꽃;orange blossom|오렌지 꽃;cotton blossom|목화꽃;chamomile|카모마일;white flower|흰 꽃'],
-['Acidity','산미','#E8622C','bright citrus|밝은 시트러스;lemon|레몬;lime|라임;pineapple|파인애플;apricot|살구;peach|복숭아;pear|배;fig|무화과;red apple|붉은 사과;green apple|청사과;grape|포도;green grape|청포도;shine muscat|샤인머스켓;grapefruit|자몽;pomelo|포멜로;passionfruit|패션프루트;raspberry|라즈베리;strawberry|딸기;wild strawberry|야생 딸기;blueberry|블루베리;black currant|블랙커런트;quince|마르멜로;mango|망고;orange|오렌지;red orange|붉은 오렌지;tangerine|귤;green tangerine|청귤;plum|자두;dark plum|검붉은 자두;cherry|체리;cranberry|크랜베리;tropical|트로피컬;yogurt|요거트'],
-['Sweetness','단맛','#B9772B','brown sugar|흑설탕;honey|꿀;molasses|당밀;caramel|카라멜;maple syrup|메이플 시럽;milk chocolate|밀크 초콜릿;chocolate|초콜릿;dark chocolate|다크 초콜릿;cocoa|코코아;acacia|아카시아;vanilla|바닐라'],
-['Herbal','허브','#6BA34A','Bergamot|베르가못;Lemongrass|레몬그라스;glass|유리;pepper|후추;rooibos|루이보스;cinnamon|계피;rosemary|로즈마리;verbena|버베나;lemon thyme|레몬 타임'],
-['Alcohol','발효','#8A2F4D','whisky|위스키;sherry whiskey|셰리 위스키;white wine|화이트 와인;red wine|레드 와인;white rum|화이트 럼'],
-['Tea','차','#A87B4F','Black tea|홍차(블랙티);Red tea|레드티;Green tea|녹차;White tea|백차;Hibiscus|히비스커스;Darjeeling|다즐링;Jasmine tea|자스민 차'],
-['Nutty','견과','#8B5E3C','Almond|아몬드;Hazelnut|헤이즐넛;Walnut|호두;Peanut|땅콩;Cashew|캐슈넛;Pecan|피칸;Chestnut|밤'],
-['Texture','질감','#8F8E88','silky|실키;milky|밀키;jam|잼;syrup|시럽;juicy|주시;candy|캔디']
+['Floral','꽃향','花香','#E58AB0','jasmin|자스민|茉莉;lily|백합|百合;lavender|라벤더|薰衣草;coffee blossom|커피 꽃|咖啡花;osmanthus|금목서|桂花;passion flower|패션 플라워|西番莲花;freesia|프리지아|小苍兰;cherry blossom|벚꽃|樱花;orange blossom|오렌지 꽃|橙花;cotton blossom|목화꽃|棉花花;chamomile|카모마일|洋甘菊;white flower|흰 꽃|白花'],
+['Acidity','산미','酸质','#E8622C','bright citrus|밝은 시트러스|明亮柑橘;lemon|레몬|柠檬;lime|라임|青柠;pineapple|파인애플|菠萝;apricot|살구|杏;peach|복숭아|桃子;pear|배|梨;fig|무화과|无花果;red apple|붉은 사과|红苹果;green apple|청사과|青苹果;grape|포도|葡萄;green grape|청포도|青提;shine muscat|샤인머스켓|阳光玫瑰;grapefruit|자몽|葡萄柚;pomelo|포멜로|柚子;passionfruit|패션프루트|百香果;raspberry|라즈베리|覆盆子;strawberry|딸기|草莓;wild strawberry|야생 딸기|野草莓;blueberry|블루베리|蓝莓;black currant|블랙커런트|黑醋栗;quince|마르멜로|榅桲;mango|망고|芒果;orange|오렌지|橙子;red orange|붉은 오렌지|红橙;tangerine|귤|橘子;green tangerine|청귤|青橘;plum|자두|李子;dark plum|검붉은 자두|黑李子;cherry|체리|樱桃;cranberry|크랜베리|蔓越莓;tropical|트로피컬|热带水果;yogurt|요거트|酸奶'],
+['Sweetness','단맛','甜感','#B9772B','brown sugar|흑설탕|红糖;honey|꿀|蜂蜜;molasses|당밀|糖蜜;caramel|카라멜|焦糖;maple syrup|메이플 시럽|枫糖浆;milk chocolate|밀크 초콜릿|牛奶巧克力;chocolate|초콜릿|巧克力;dark chocolate|다크 초콜릿|黑巧克力;cocoa|코코아|可可;acacia|아카시아|洋槐蜜;vanilla|바닐라|香草'],
+['Herbal','허브','草本','#6BA34A','Bergamot|베르가못|佛手柑;Lemongrass|레몬그라스|香茅;glass|유리|玻璃;pepper|후추|胡椒;rooibos|루이보스|路易波士茶;cinnamon|계피|肉桂;rosemary|로즈마리|迷迭香;verbena|버베나|马鞭草;lemon thyme|레몬 타임|柠檬百里香'],
+['Alcohol','발효','酒香','#8A2F4D','whisky|위스키|威士忌;sherry whiskey|셰리 위스키|雪莉威士忌;white wine|화이트 와인|白葡萄酒;red wine|레드 와인|红葡萄酒;white rum|화이트 럼|白朗姆酒'],
+['Tea','차','茶感','#A87B4F','Black tea|홍차(블랙티)|红茶 (Black tea);Red tea|레드티|红茶 (Red tea);Green tea|녹차|绿茶;White tea|백차|白茶;Hibiscus|히비스커스|洛神花;Darjeeling|다즐링|大吉岭红茶;Jasmine tea|자스민 차|茉莉花茶'],
+['Nutty','견과','坚果','#8B5E3C','Almond|아몬드|杏仁;Hazelnut|헤이즐넛|榛子;Walnut|호두|核桃;Peanut|땅콩|花生;Cashew|캐슈넛|腰果;Pecan|피칸|碧根果;Chestnut|밤|栗子'],
+['Texture','질감','口感','#8F8E88','silky|실키|丝滑;milky|밀키|奶感;jam|잼|果酱感;syrup|시럽|糖浆感;juicy|주시|多汁;candy|캔디|糖果感']
 ];
-var CATS=RAW.map(function(r){return{n:r[0],k:r[1],c:r[2],t:r[3].split(';').map(function(x){var p=x.split('|');return{e:p[0],k:p[1]};})};});
-var KEY='sowon-flavor-wheel-v1';
-var act=null,sel=[],lang='en',cup='',timer=null;
+var CATS=RAW.map(function(r){return{n:r[0],k:r[1],z:r[2],c:r[3],t:r[4].split(';').map(function(x){var p=x.split('|');return{e:p[0],k:p[1],z:p[2]};})};});
+var I={
+ko:{ttl:'향미 휠',sub:'시음하면서 눌러서 찾아보세요',th:'내가 고른 향미',empty:'고른 향미가 여기에 쌓입니다.',notes:'향미',hint:'분류를 눌러 향미를 확인하고, 느낀 향미를 눌러 고르세요.',copy:'텍스트 복사',img:'이미지 저장',clr:'초기화',copied:'복사했습니다',cfail:'복사하지 못했습니다',ifail:'이미지를 만들지 못했습니다',isaved:'이미지를 저장했습니다',confirm:'컵 이름과 고른 향미를 모두 지울까요?',cupph:'컵 이름 (예: 에티오피아 게뎁 워시드)',cupl:'컵 이름',wl:'향미 휠',colon:': ',sep:', ',max:28,html:'ko'},
+en:{ttl:'Flavor wheel',sub:'Tap the notes you taste',th:'My notes',empty:'Selected notes will appear here.',notes:'Notes',hint:'Tap a category, then tap the notes you taste.',copy:'Copy text',img:'Save image',clr:'Clear',copied:'Copied',cfail:'Copy failed',ifail:'Could not create image',isaved:'Image saved',confirm:'Clear the cup name and all selected notes?',cupph:'Cup name (e.g. Ethiopia Gedeb Washed)',cupl:'Cup name',wl:'Flavor wheel',colon:': ',sep:', ',max:50,html:'en'},
+zh:{ttl:'风味轮',sub:'边喝边点，找到你尝到的风味',th:'我选的风味',empty:'选中的风味会显示在这里。',notes:'风味',hint:'点击分类查看风味，再点你尝到的风味进行选择。',copy:'复制文字',img:'保存图片',clr:'重置',copied:'已复制',cfail:'复制失败',ifail:'无法生成图片',isaved:'图片已保存',confirm:'清除杯子名称和所有已选风味吗？',cupph:'杯子名称（例如：埃塞俄比亚 格德奥 水洗）',cupl:'杯子名称',wl:'风味轮',colon:'：',sep:'、',max:28,html:'zh-CN'}
+};
+var KEY='sowon-flavor-wheel-multi-v1';
+var act=null,sel=[],lang='ko',cup='',timer=null;
 var CX=200,CY=170;
+var FONT='Apple SD Gothic Neo,Noto Sans KR,PingFang SC,Microsoft YaHei,Noto Sans SC,Helvetica,Arial,sans-serif';
 
 function load(){
 try{
 var raw=localStorage.getItem(KEY);
 if(!raw)return;
 var o=JSON.parse(raw);
-if(o.lang==='ko'||o.lang==='en')lang=o.lang;
+if(o.lang==='ko'||o.lang==='en'||o.lang==='zh')lang=o.lang;
 if(typeof o.cup==='string')cup=o.cup.slice(0,40);
 if(Array.isArray(o.sel)){
 sel=o.sel.filter(function(k){
@@ -109,8 +114,9 @@ return p.length===2&&CATS[+p[0]]&&CATS[+p[0]].t[+p[1]];
 function save(){
 try{localStorage.setItem(KEY,JSON.stringify({sel:sel,lang:lang,cup:cup}));}catch(e){}
 }
-function cname(d){return lang==='ko'?d.k:d.n;}
-function tname(t){return lang==='ko'?t.k:t.e;}
+function T(k){return I[lang][k];}
+function cname(d){return lang==='ko'?d.k:(lang==='zh'?d.z:d.n);}
+function tname(t){return lang==='ko'?t.k:(lang==='zh'?t.z:t.e);}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 function pt(r,a){var t=a*Math.PI/180;return [(CX+r*Math.sin(t)).toFixed(1),(CY-r*Math.cos(t)).toFixed(1)];}
 function sec(r0,r1,a0,a1){
@@ -142,11 +148,11 @@ return s;
 }
 function chipHtml(ci,ti,inTray){
 var d=CATS[ci],t=d.t[ti],on=sel.indexOf(ci+':'+ti)>=0;
-var sub=(!inTray&&lang==='en')?'<small>'+esc(t.k)+'</small>':'';
+var sub=(!inTray&&lang==='en')?'<small>'+esc(t.k)+' · '+esc(t.z)+'</small>':'';
 return '<button type="button" class="chip'+(on?' on':'')+'" data-t="'+ci+':'+ti+'" aria-pressed="'+(on?'true':'false')+'" style="border-color:'+d.c+';background:'+d.c+(on?'66':'1f')+'">'+esc(tname(t))+sub+'</button>';
 }
 function render(){
-document.getElementById('wheel').innerHTML='<svg viewBox="0 0 400 340" role="img" aria-label="'+(lang==='ko'?'향미 휠':'Flavor wheel')+'">'+wheel(false)+'</svg>';
+document.getElementById('wheel').innerHTML='<svg viewBox="0 0 400 340" role="img" aria-label="'+T('wl')+'">'+wheel(false)+'</svg>';
 var p='';
 CATS.forEach(function(d,i){
 p+='<button type="button" class="pill'+(act===i?' on':'')+'" data-c="'+i+'" aria-pressed="'+(act===i?'true':'false')+'"><i style="background:'+d.c+'"></i>'+esc(cname(d))+'</button>';
@@ -154,7 +160,7 @@ p+='<button type="button" class="pill'+(act===i?' on':'')+'" data-c="'+i+'" aria
 document.getElementById('pills').innerHTML=p;
 var h='';
 if(act===null){
-h='<h2>'+(lang==='ko'?'향미':'Notes')+'</h2><p class="hint">'+(lang==='ko'?'분류를 눌러 향미를 확인하고, 느낀 향미를 눌러 고르세요.':'Tap a category, then tap the notes you taste.')+'</p>';
+h='<h2>'+T('notes')+'</h2><p class="hint">'+T('hint')+'</p>';
 }else{
 var d=CATS[act];
 h='<h2>'+esc(cname(d))+'</h2><div class="chips">';
@@ -162,23 +168,26 @@ d.t.forEach(function(t,ti){h+=chipHtml(act,ti,false);});
 h+='</div>';
 }
 document.getElementById('panel').innerHTML=h;
-document.getElementById('th').textContent=(lang==='ko'?'내가 고른 향미':'My notes');
+document.getElementById('ttl').textContent=T('ttl');
+document.getElementById('sub').textContent=T('sub');
+document.getElementById('th').textContent=T('th');
 var tr='';
-if(!sel.length){tr='<p class="hint">'+(lang==='ko'?'고른 향미가 여기에 쌓입니다.':'Selected notes will appear here.')+'</p>';}
+if(!sel.length){tr='<p class="hint">'+T('empty')+'</p>';}
 else{tr='<div class="chips">';sel.forEach(function(k){var q=k.split(':');tr+=chipHtml(+q[0],+q[1],true);});tr+='</div>';}
 document.getElementById('tray').innerHTML=tr;
+document.getElementById('bcopy').textContent=T('copy');
+document.getElementById('bimg').textContent=T('img');
+document.getElementById('bclr').textContent=T('clr');
 document.getElementById('bcopy').disabled=!sel.length;
 document.getElementById('bimg').disabled=!sel.length;
 document.getElementById('bclr').disabled=!(sel.length||cup);
 var ci=document.getElementById('cup');
 if(ci.value!==cup)ci.value=cup;
-ci.placeholder=lang==='ko'?'컵 이름 (예: 에티오피아 게뎁 워시드)':'Cup name (e.g. Ethiopia Gedeb Washed)';
-ci.setAttribute('aria-label',lang==='ko'?'컵 이름':'Cup name');
-document.getElementById('bcopy').textContent=lang==='ko'?'텍스트 복사':'Copy text';
-document.getElementById('bimg').textContent=lang==='ko'?'이미지 저장':'Save image';
-document.getElementById('bclr').textContent=lang==='ko'?'초기화':'Clear';
+ci.placeholder=T('cupph');
+ci.setAttribute('aria-label',T('cupl'));
 document.querySelectorAll('[data-l]').forEach(function(b){var on=b.getAttribute('data-l')===lang;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');});
-document.documentElement.lang=lang==='ko'?'ko':'en';
+document.documentElement.lang=T('html');
+document.title=T('ttl');
 save();
 }
 function summary(){
@@ -186,7 +195,7 @@ var out=[];
 CATS.forEach(function(d,ci){
 var n=[];
 sel.forEach(function(k){var p=k.split(':');if(+p[0]===ci)n.push(tname(d.t[p[1]]));});
-if(n.length)out.push(cname(d)+': '+n.join(', '));
+if(n.length)out.push(cname(d)+T('colon')+n.join(T('sep')));
 });
 return out;
 }
@@ -203,36 +212,36 @@ document.body.appendChild(a);a.select();
 var ok=false;
 try{ok=document.execCommand('copy');}catch(e){}
 document.body.removeChild(a);
-toast(ok?(lang==='ko'?'복사했습니다':'Copied'):(lang==='ko'?'복사하지 못했습니다':'Copy failed'));
+toast(ok?T('copied'):T('cfail'));
 }
 function copyText(){
+if(!sel.length)return;
 var tx=(cup?cup+'\n':'')+summary().join('\n');
-if(!tx)return;
 if(navigator.clipboard&&navigator.clipboard.writeText){
-navigator.clipboard.writeText(tx).then(function(){toast(lang==='ko'?'복사했습니다':'Copied');},function(){fallbackCopy(tx);});
+navigator.clipboard.writeText(tx).then(function(){toast(T('copied'));},function(){fallbackCopy(tx);});
 }else{fallbackCopy(tx);}
 }
 function wrapLine(s,max){
-var parts=s.split(', '),lines=[],cur='';
+var sep=T('sep'),parts=s.split(sep),lines=[],cur='';
 parts.forEach(function(p){
-var nx=cur?cur+', '+p:p;
-if(nx.length>max&&cur){lines.push(cur+',');cur=p;}else{cur=nx;}
+var nx=cur?cur+sep+p:p;
+if(nx.length>max&&cur){lines.push(cur+sep.trim());cur=p;}else{cur=nx;}
 });
 if(cur)lines.push(cur);
 return lines;
 }
 function exportImage(){
 if(!sel.length)return;
-var W=720,top=96,wh=612,max=lang==='ko'?28:50;
+var W=720,top=96,wh=612,max=T('max');
 var rows=[];
 summary().forEach(function(l){wrapLine(l,max).forEach(function(x,i){rows.push({t:x,ind:i>0});});});
 var H=top+wh+24+rows.length*36+40;
 var d=new Date();
 var ds=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
-var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" font-family="Apple SD Gothic Neo, Noto Sans KR, Helvetica, Arial, sans-serif">';
+var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" font-family="'+FONT+'">';
 svg+='<rect width="'+W+'" height="'+H+'" fill="#FFFFFF"/>';
 var ts=Math.max(16,Math.min(30,Math.floor(640/Math.max(cup.length,1))));
-svg+='<text x="40" y="50" font-size="'+ts+'" font-weight="600" fill="#1D2321">'+esc(cup||(lang==='ko'?'향미 휠':'Flavor wheel'))+'</text>';
+svg+='<text x="40" y="50" font-size="'+ts+'" font-weight="600" fill="#1D2321">'+esc(cup||T('wl'))+'</text>';
 svg+='<text x="40" y="80" font-size="18" fill="#5F6A66">'+ds+'</text>';
 svg+='<g transform="translate(0,'+top+') scale(1.8)">'+wheel(true)+'</g>';
 rows.forEach(function(r,i){
@@ -247,7 +256,7 @@ var cx=cv.getContext('2d');
 cx.scale(2,2);
 cx.drawImage(img,0,0,W,H);
 cv.toBlob(function(b){
-if(!b){toast(lang==='ko'?'이미지를 만들지 못했습니다':'Could not create image');return;}
+if(!b){toast(T('ifail'));return;}
 var f=null;
 try{f=new File([b],'flavor-wheel.png',{type:'image/png'});}catch(e){}
 if(f&&navigator.canShare&&navigator.canShare({files:[f]})){
@@ -258,11 +267,11 @@ var a=document.createElement('a');
 a.href=u;a.download='flavor-wheel.png';
 document.body.appendChild(a);a.click();document.body.removeChild(a);
 setTimeout(function(){URL.revokeObjectURL(u);},4000);
-toast(lang==='ko'?'이미지를 저장했습니다':'Image saved');
+toast(T('isaved'));
 }
 },'image/png');
 };
-img.onerror=function(){toast(lang==='ko'?'이미지를 만들지 못했습니다':'Could not create image');};
+img.onerror=function(){toast(T('ifail'));};
 img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
 }
 document.addEventListener('click',function(e){
@@ -284,7 +293,7 @@ render();
 if(v==='copy')copyText();
 else if(v==='img')exportImage();
 else if(v==='clr'){
-if((sel.length||cup)&&window.confirm(lang==='ko'?'컵 이름과 고른 향미를 모두 지울까요?':'Clear the cup name and all selected notes?')){sel=[];cup='';render();}
+if((sel.length||cup)&&window.confirm(T('confirm'))){sel=[];cup='';render();}
 }
 }
 });
