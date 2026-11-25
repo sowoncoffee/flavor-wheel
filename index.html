@@ -9,7 +9,7 @@
 :root{--o:#c1803d;--d:#7f4a27;--t:#2b2f3a;--m:#8a8f9a;--l:#e4e6ea;--bg:#fff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--t);font:16px/1.4 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+body{margin:0;background:var(--bg);color:var(--t);font:16px/1.4 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;padding-bottom:calc(215px + env(safe-area-inset-bottom))}
 header{display:flex;align-items:center;gap:28px;padding:calc(22px + env(safe-area-inset-top)) 24px 18px;max-width:600px;margin:auto}
 .logo{background:#2b2522;color:#fff;border-radius:12px;padding:10px 14px;text-align:center;line-height:1}
 .logo b{display:block;font-size:22px;font-weight:600;padding-bottom:6px;border-bottom:1px solid #5a504a}
@@ -39,11 +39,12 @@ canvas{display:block;width:100%;max-width:400px;margin:0 auto;border-radius:12px
 .btn{border:0;border-radius:16px;padding:18px;font:800 19px inherit;font-family:inherit}
 .main{background:var(--d);color:#fff}
 .sec{background:#fff;color:var(--d);border:1.5px solid var(--l)}
+.rst{background:transparent;color:var(--m);padding:10px;font-size:16px;font-weight:700}
 .card{display:flex;align-items:center;gap:8px;border:1px solid var(--l);border-radius:14px;padding:14px 16px;margin:12px 0}
 .card div{flex:1;min-width:0}.card b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card small{color:var(--m)}
 .card button{border:1px solid var(--l);background:#fff;border-radius:10px;padding:8px 12px;font:14px inherit;font-family:inherit}
-#toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#2b2522;color:#fff;padding:10px 18px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast{position:fixed;left:50%;bottom:calc(215px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#2b2522;color:#fff;padding:10px 18px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
 #toast.show{opacity:1}
 </style>
 </head>
@@ -82,6 +83,7 @@ canvas{display:block;width:100%;max-width:400px;margin:0 auto;border-radius:12px
 <div class="bar" id="bar"><div>
 <button class="btn main" id="png">이미지 저장 (사진 앱)</button>
 <button class="btn sec" id="keep">저장 목록에 담기</button>
+<button class="btn rst" id="reset">리셋 (처음부터 다시)</button>
 </div></div>
 <div id="toast"></div>
 
@@ -93,14 +95,14 @@ country:`Colombia,Ethiopia,Brazil,Guatemala,Kenya,Indonesia,Costa Rica,Vietnam,P
 varietal:`Typica,Bourbon,Caturra,Catuai,Catimor,Castillo,Geisha,Pacamara,SL24.28,Heirloom,74158,74110,74112,dere132,Mundo Novo,Maragogype,Pacas,Catu's,Parainema,Sarchimor,Sudan Rume,Blend`,
 process:`Natural,Washed,Honey,Wet-Hulled,Anaerobic Natural,Anaerobic Washed,Carbonic Maceration,Fruit Fermentation,Yeast Fermentation,Infused,EA Decaffein,SW Decaffein`};
 const FL={
-Floral:`jasmin,lily,lavender,coffee blossom,osmanthus,passion flower,freesia,cherry blossom,orange blossom,cotton blossom,chamomile,white flower`,
-Acidity:`bright citrus,lemon,lime,pineapple,apricot,peach,pear,fig,red apple,green apple,grape,green grape,shine muscat,grapefruit,pomelo,passionfruit,raspberry,strawberry,wild strawberry,blueberry,black currant,quince,mango,orange,red orange,tangerine,green tangerine,plum,dark plum,cherry,cranberry,tropical,yogurt`,
-Sweetness:`brown sugar,honey,molasses,caramel,maple syrup,milk chocolate,chocolate,dark chocolate,cocoa,acacia,vanilla`,
+Floral:`jasmin,lily,lavender,coffee blossom,osmanthus,passion flower,freesia,cherry blossom,orange blossom,cotton blossom,chamomile,white flower,floral`,
+Acidity:`bright citrus,lemon,lime,pineapple,apricot,peach,pear,fig,red apple,green apple,grape,green grape,shine muscat,grapefruit,pomelo,passionfruit,raspberry,strawberry,wild strawberry,blueberry,black currant,quince,mango,orange,red orange,tangerine,green tangerine,plum,dark plum,cherry,cranberry,tropical,yogurt,raisin`,
+Sweetness:`brown sugar,honey,molasses,caramel,maple syrup,milk chocolate,chocolate,dark chocolate,cocoa,vanilla`,
 Herbal:`Bergamot,Lemongrass,glass,pepper,rooibos,cinnamon,rosemary,verbena,lemon thyme,tea rose`,
 Alcohol:`whisky,sherry whiskey,white wine,red wine,white rum`,
-Tea:`Black tea,Red tea,Green tea,White tea,Hibiscus,Darjeeling,Jasmine tea`,
+Tea:`Black tea,Red tea,Green tea,White tea,Hibiscus,Darjeeling,Jasmine tea,Oolong tea`,
 Nutty:`Almond,Hazelnut,Walnut,Peanut,Cashew,Pecan,Chestnut`,
-Texture:`silky,milky,jam,syrup,juicy,candy`};
+Texture:`silky,milky,jam,syrup,juicy,candy,creamy`};
 const el={country:$('#country'),varietal:$('#varietal'),process:$('#process'),flavor:$('#flavor')};
 const multi={varietal:1,flavor:1};
 let usage='Brewing';
@@ -219,6 +221,7 @@ $('#keep').onclick=()=>toast(addList()?'저장 목록에 담았어요':'이미 �
 function today(){const n=new Date(),p=z=>String(z).padStart(2,'0');return n.getFullYear()+'-'+p(n.getMonth()+1)+'-'+p(n.getDate())}
 // 이미지 저장 후: 저장 목록에 자동 저장 + 처음 상태로 초기화
 function resetForm(){IDS.forEach(i=>$('#'+i).value='');$('#date').value=today();setUsage('Brewing');sync();scrollTo(0,0)}
+$('#reset').onclick=()=>{resetForm();toast('모두 지우고 처음 상태로 돌렸어요')};
 function finish(){addList();resetForm();toast('저장 목록에 담고 새로 시작해요')}
 function renderList(){
   const a=load(),box=$('#list');box.innerHTML='';
